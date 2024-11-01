@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -e
+
+if [ -z "$1" ]
+then
+	echo "$0 (class)"
+	exit 1
+fi
+
+CLASS=$1
+
+for ID in `ls /.snapshots/$CLASS`
+do
+	for SNAP_VOL_PATH in /.snapshots/$CLASS/$ID/*
+	do
+		btrfs subvolume delete $SNAP_VOL_PATH
+	done
+
+	rmdir /.snapshots/$CLASS/$ID
+done
+
+echo 0 > /.snapshots/$CLASS.id

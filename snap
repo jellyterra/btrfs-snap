@@ -1,0 +1,22 @@
+#!/bin/bash
+
+set -e
+
+if [ -z "$1" ]
+then
+	echo "$0 (class)"
+	exit 1
+fi
+
+CLASS=$1
+
+ID=`cat /.snapshots/$CLASS.id`
+
+mkdir /.snapshots/$CLASS/$ID
+
+while read VOL
+do
+	btrfs subvolume snapshot -r /$VOL /.snapshots/$CLASS/$ID/$VOL
+done < /.snapshots/$CLASS.vol
+
+echo $((ID+1)) > /.snapshots/$CLASS.id

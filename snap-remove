@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -e
+
+if [ -z "$2" ]
+then
+	echo "$0 (class) (id)"
+	exit 1
+fi
+
+CLASS=$1
+ID=$2
+
+btrfs subvolume delete /.snapshots/$CLASS/$ID/*
+
+rmdir /.snapshots/$CLASS/$ID

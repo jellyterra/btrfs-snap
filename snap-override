@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -e
+
+if [ -z "$1" ]
+then
+	echo "$0 (class)"
+	exit 1
+fi
+
+CLASS=$1
+
+ID=$((`cat /.snapshots/$CLASS.id`-1))
+
+snap-remove $CLASS $ID
+
+echo $ID > /.snapshots/$CLASS.id
+
+snap $CLASS
